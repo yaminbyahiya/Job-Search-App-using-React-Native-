@@ -5,6 +5,7 @@ import { useState, useCallback } from 'react';
 import { Company, JobAbout, JobFooter, JobTabs, ScreenHeaderBtn, Specifics } from '../../components';
 import { COLORS, icons, SIZES } from '../../constants';
 import useFetch from '../../hook/useFetch';
+import styles from '../../components/jobdetails/company/company.style';
 const tabs=["About", "Qualifications", "Responsibilities"];
 const JobDetails = () => {
     const params = useSearchParams();
@@ -16,7 +17,11 @@ const JobDetails = () => {
     console.log(data);
     const [refreshing, setRefreshing] = useState(false);
     const [activeTab, setActiveTab] = useState(tabs[0]);
-    const onRefresh = () => {}
+    const onRefresh = useCallback(() => {
+        setRefreshing(true);
+        refetch()
+        setRefreshing(false)
+      }, []);
     const displayTabContent = () => {
         switch (activeTab) {
             case "Qualifications":
@@ -25,8 +30,13 @@ const JobDetails = () => {
                 points={data[0].job_highlights?.Qualifications ?? ['N/A']}></Specifics>
                 break;
             case "About":
-                break
+                return <JobAbout
+                info={data[0].job_description ?? "No data provided"}></JobAbout>
+                break;
             case "Responsibilities":
+                return <Specifics
+                title="Responsibilities"
+                points={data[0].job_highlights?.Responsibilities ?? ['N/A']}></Specifics>
                 break
             default:
                 break;
@@ -64,7 +74,7 @@ const JobDetails = () => {
                     </RefreshControl>}>
                         {isLoading?(
                         <ActivityIndicator size="large" color={COLORS.primary}></ActivityIndicator>):error?(
-                        <Text>Something went wrong</Text>):data.length===0?(
+                        <Text style={styles.jobTitle}>Please refresh the page!</Text>):data.length===0?(
                         <Text>No data</Text>):(
                         <View style={{padding:SIZES.medium, paddingBottom:100}}>
                             <Company 
@@ -79,6 +89,8 @@ const JobDetails = () => {
                             {displayTabContent()}
                         </View>)}
                 </ScrollView>
+                <JobFooter
+                url={data[0]?.job_google_link ?? 'https://careers.google.com/jobs/results'}></JobFooter>
             </>
         </SafeAreaView>
     )

@@ -2,10 +2,11 @@ import React from 'react'
 import { View, Text, TouchableOpacity, FlatList, ActivityIndicator } from 'react-native'
 import { useState } from 'react'
 import { useRouter } from 'expo-router'
-import { icons, SIZES } from '../../../constants';
+import { COLORS, icons, SIZES } from '../../../constants';
 import styles from './popularjobs.style';
 import PopularJobCard from '../../common/cards/popular/PopularJobCard';
 import { isLoading } from 'expo-font';
+
 import useFetch from '../../../hook/useFetch';
 const Popularjobs = () => {
   const router = useRouter();
@@ -28,7 +29,7 @@ const Popularjobs = () => {
         </TouchableOpacity>
       </View>
       <View style={styles.cardsContainer}>
-        {isLoading?(<ActivityIndicator></ActivityIndicator>):error?(<Text>Something went wrong!</Text>):<FlatList
+        {isLoading?(<ActivityIndicator size='large' color={COLORS.primary}></ActivityIndicator>):error?(<Text>Something went wrong!</Text>):<FlatList
         data={data}
         renderItem={({item})=>(
           <PopularJobCard item={item}
