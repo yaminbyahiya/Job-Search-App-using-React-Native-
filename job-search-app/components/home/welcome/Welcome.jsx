@@ -5,7 +5,7 @@ import { View, Text, TextInput, TouchableOpacity, Image, FlatList } from 'react-
 import { useRouter } from 'expo-router';
 import { icons, SIZES } from '../../../constants';
 const jobTypes = ["Full-time", "Part-Time", "Contractor"]
-const Welcome = () => {
+const Welcome = ({searchTerm, setSearchTerm, handleClick}) => {
   const router = useRouter();
   const [activeJobType, setActiveJobType] = useState("Full-Time")
   return (
@@ -18,12 +18,12 @@ const Welcome = () => {
         <View style={styles.searchWrapper}>
           <TextInput
             style={styles.searchInput}
-            value=''
-            onChange={() => { }}
+            value={searchTerm}
+            onChangeText={(text) => {setSearchTerm(text)}}
             placeholder='What are you looking for?'
           ></TextInput>
         </View>
-        <TouchableOpacity style={styles.searchBtn} onPress={() => { }}>
+        <TouchableOpacity style={styles.searchBtn} onPress={handleClick}>
           <Image
             source={icons.search}
             resizeMode='contain'
